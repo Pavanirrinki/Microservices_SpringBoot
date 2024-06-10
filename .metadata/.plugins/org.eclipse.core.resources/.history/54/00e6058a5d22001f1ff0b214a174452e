@@ -1,0 +1,60 @@
+package com.example.demo.LoginDto;
+
+
+import java.util.List;
+import java.util.UUID;
+
+public class UserDto {
+	 private UUID id;
+	 private String email;
+	 private String password;
+	 private String name;
+	 private long Mobilenumber;
+	 private List<String> Skills;
+	 @jakarta.persistence.Lob
+	 private byte[] File;
+	 
+	public long getMobilenumber() {
+		return Mobilenumber;
+	}
+	public void setMobilenumber(long mobilenumber) {
+		Mobilenumber = mobilenumber;
+	}
+	public List<String> getSkills() {
+		return Skills;
+	}
+	public void setSkills(List<String> skills) {
+		Skills = skills;
+	}
+	public byte[] getFile() {
+		return File;
+	}
+	public void setFile(byte[] file) {
+		File = file;
+	}
+	public UUID getId() {
+		return id;
+	}
+	public void setId(UUID id) {
+		this.id = id;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}

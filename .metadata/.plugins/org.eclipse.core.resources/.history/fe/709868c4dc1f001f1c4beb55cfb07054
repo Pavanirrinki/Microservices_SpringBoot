@@ -1,0 +1,5 @@
+package Job_application.CompanyService.FeignClient;
+
+public class UserClient {
+
+}

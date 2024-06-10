@@ -1,0 +1,36 @@
+package Job_application.JobsService.Controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import Job_application.JobsService.FeignClient.UserClient;
+import Job_application.JobsService.JobsDto.JobsDto;
+import Job_application.JobsService.Service.JobsService;
+
+@RestController
+@RequestMapping("/Jobs")
+public class JobsController {
+
+	@Autowired
+	private JobsService jobsService;
+	
+	@Autowired
+	private UserClient userClient;
+
+	@PostMapping("/save")
+	public JobsDto saveJob(@RequestBody JobsDto jobsDto) {
+		JobsDto savedjobs = jobsService.SaveJob(jobsDto);
+		return savedjobs;
+
+	}
+	
+	@GetMapping("/test_in_user")
+	public String GetData() {
+		return userClient.testEndpoint();
+	}
+
+}

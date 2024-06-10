@@ -1,0 +1,7 @@
+spring.application.name=API_GATEWAY
+server.port = 8765
+spring.cloud.gateway.discovery.locator.enabled = true
+logging.level.root= info
+logging.level.org.springframework.cloud.gateway.route.RouteDefinitionLocator =INFO
+logging.level.org.springframework.cloud.gateway=TRACE
+logging.level.org.springframework.cloud.gateway.filter.WeightCalculatorFilter=TRACE

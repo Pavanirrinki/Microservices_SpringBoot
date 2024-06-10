@@ -1,0 +1,12 @@
+package Job_application.JobsService.Service;
+
+import java.util.UUID;
+
+import Job_application.JobsService.JobsDto.JobsDto;
+
+public interface JobsService {
+   
+	JobsDto SaveJob(JobsDto jobsDto);
+
+	JobsDto updateJobDetails(UUID id, JobsDto jobsDto);
+}

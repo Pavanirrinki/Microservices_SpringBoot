@@ -1,0 +1,17 @@
+package com.demo.CrudOperations.service;
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.demo.CrudOperations.Repository.UserRepository;
+
+import java.util.List;
+
+@Service
+public class UserService {
+	
+    @Autowired
+    private UserRepository userRepository;
+
+   
+}

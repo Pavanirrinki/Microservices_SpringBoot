@@ -1,0 +1,31 @@
+package Job_application.CompanyService.Service;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import Job_application.CompanyService.CompanyDto.CompanyDto;
+import Job_application.CompanyService.CompanyRepository.CompanyRepository;
+import Job_application.CompanyService.Entity.Company_Table;
+
+
+@Service
+public class CompanyServiceImpl implements CompanyService{
+	
+	@Autowired
+	private CompanyRepository companyRepository;
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Override
+	public CompanyDto saveComapny(CompanyDto companyDto) {
+	
+		
+		Company_Table company = companyRepository.save(modelMapper.map(companyDto, Company_Table.class));
+		CompanyDto savedcompanies = modelMapper.map(company, CompanyDto.class);
+         return savedcompanies;
+		}
+
+	
+
+}

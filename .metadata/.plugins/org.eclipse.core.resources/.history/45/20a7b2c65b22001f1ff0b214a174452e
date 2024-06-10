@@ -1,0 +1,15 @@
+package com.example.demo.FeignClient;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.example.demo.LoginDto.UserDto;
+
+import Job_application.UserService.UserEntity.User_table;
+
+@FeignClient(name ="USER-SERVICE",url = "http://localhost:9091/users")
+public interface UserClient {
+	@GetMapping("/find_by_email")
+	public UserDto FindBy(String email);
+}

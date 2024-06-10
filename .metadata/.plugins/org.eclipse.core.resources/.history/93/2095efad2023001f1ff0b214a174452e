@@ -1,0 +1,5 @@
+package Job_application.UserService.UserRepository;
+
+public interface User_resume {
+
+}
