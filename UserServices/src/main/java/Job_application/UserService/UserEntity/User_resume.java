@@ -1,5 +1,7 @@
 package Job_application.UserService.UserEntity;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +22,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+//Jackson will skip the specified properties when converting the object to JSON or when creating an object from JSON.
 public class User_resume {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,13 +35,32 @@ public class User_resume {
     private User_data userId;
 
     private List<String> skills;
-
-    @Lob
-    private byte[] pdf;
+    
+    private String resumename;
+    private String uploadeddate;
+	@Lob
+	@Column(columnDefinition = "MEDIUMBLOB")
+	private String pdf;
     private List<UUID> Applied_jobs;
-    // Getters and Setters
+    
+    public String getResumename() {
+		return resumename;
+	}
 
-    public List<UUID> getApplied_jobs() {
+	public void setResumename(String resumename) {
+		this.resumename = resumename;
+	}
+
+
+    public String getUploadeddate() {
+		return uploadeddate;
+	}
+
+	public void setUploadeddate(String uploadeddate) {
+		this.uploadeddate = uploadeddate;
+	}
+
+	public List<UUID> getApplied_jobs() {
 		return Applied_jobs;
 	}
 
@@ -54,15 +76,16 @@ public class User_resume {
         this.skills = skills;
     }
 
-    public byte[] getPdf() {
-        return pdf;
-    }
 
-    public void setPdf(byte[] pdf) {
-        this.pdf = pdf;
-    }
+    public String getPdf() {
+		return pdf;
+	}
 
-    public UUID getId() {
+	public void setPdf(String pdf) {
+		this.pdf = pdf;
+	}
+
+	public UUID getId() {
         return id;
     }
 

@@ -1,8 +1,0 @@
-package Job_application.CompanyService.FeignClient;
-
-import org.springframework.cloud.openfeign.FeignClient;
-
-@FeignClient(name="USER-SERVICE")
-public Interface UserClient {
-
-}

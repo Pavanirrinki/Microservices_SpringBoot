@@ -11,7 +11,14 @@ public class JobsDto {
     private Integer applied;
     private UUID companyId;
     private String Location;
+    private String  jobTitle ;
     
+	public String getJobTitle() {
+		return jobTitle;
+	}
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
 	public String getLocation() {
 		return Location;
 	}

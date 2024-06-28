@@ -1,8 +1,0 @@
-package Job_application.CompanyService.Service;
-
-import Job_application.CompanyService.CompanyDto.CompanyDto;
-
-public interface CompanyService {
-	
-	CompanyDto saveComapny(CompanyDto companyDto);
-}

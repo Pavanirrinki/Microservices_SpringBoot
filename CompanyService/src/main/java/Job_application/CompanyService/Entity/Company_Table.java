@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 
 @Entity
 @Table(name = "company_table")
@@ -23,8 +24,10 @@ public class Company_Table {
 
 	private String companyName;
 
-	private String companyDescription;
-
+    @Lob
+    @Column(name = "job_description", nullable = false,columnDefinition="CLOB")
+    private String companyDescription;
+	
 	public UUID getId() {
 		return id;
 	}

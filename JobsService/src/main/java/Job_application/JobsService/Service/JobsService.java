@@ -15,4 +15,10 @@ public interface JobsService {
 	List<Jobs_Table> FetchAllJobs();
 
 	List<Jobs_Table> findAllJobsByCompanyId(UUID companyId);
+
+	List<Jobs_Table> findByJobDescription(String jobDescription);
+
+	String DeleteJob(UUID job_Id);
+
+	
 }

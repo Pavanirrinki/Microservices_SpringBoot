@@ -55,6 +55,18 @@ public class JobsServiceImpl implements JobsService{
 		return alljobsByCompany;
 	}
 
+	@Override
+	public List<Jobs_Table> findByJobDescription(String jobDescription) {
+		List<Jobs_Table> searchedJobs = jobsRepository.findByJobTitleContainingIgnoreCase(jobDescription);
+		return searchedJobs;
+	}
+
+	@Override
+	public String DeleteJob(UUID job_Id) {
+		jobsRepository.deleteById(job_Id);
+		return "Job Deleted Successfully";
+	}
+
 	
 	
 	

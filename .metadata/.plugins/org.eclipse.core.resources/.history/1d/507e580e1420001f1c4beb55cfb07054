@@ -1,5 +1,0 @@
-package Job_application.JobsService.external;
-
-public class UserDto {
-
-}

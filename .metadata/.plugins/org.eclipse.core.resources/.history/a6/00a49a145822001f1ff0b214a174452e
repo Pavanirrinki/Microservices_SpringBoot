@@ -1,5 +1,0 @@
-package com.example.demo.FeignClient;
-
-public class UserClient {
-
-}

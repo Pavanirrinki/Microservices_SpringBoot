@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import Job_application.CompanyService.Service.CompanyService;
 
 @RestController
 @RequestMapping("/company")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CompanyController {
 	
 	@Autowired
