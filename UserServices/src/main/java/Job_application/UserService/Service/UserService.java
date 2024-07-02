@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
+
 import Job_application.UserService.UserDto.UserDto;
 import Job_application.UserService.UserDto.UserGraduationDto;
 
@@ -23,6 +24,7 @@ public interface UserService {
 	List<User_data> fetchallusers();
 	UserGraduationDto saveEducationalDetails(UUID UserId, UserGraduationDto userGraduationDto);
 	UserDto updateUserPersonalDetails(UserDto userDto, UUID userId);
+	User_data ChangePassword(String email, String password);
     
 	
     

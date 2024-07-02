@@ -1,54 +1,79 @@
 package Job_application.CompanyService.Entity;
-
 import java.util.List;
-import java.util.UUID;
-
+import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+
 
 @Entity
 @Table(name = "company_table")
 public class Company_Table {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
+	@UuidGenerator
 	@Column(name = "Id", updatable = false, nullable = false)
-	private UUID id;
+	private String id;
+    private String name;
 
-	private String companyName;
-
-    @Lob
-    @Column(name = "job_description", nullable = false,columnDefinition="CLOB")
-    private String companyDescription;
+	@Lob
+	@Column(columnDefinition = "MEDIUMBLOB")
+	private List<String> companyDescription;
+    private String email;
+	private long mobilenumber;
+	private String password;
 	
-	public UUID getId() {
+	private List<String> workingTechnologies;
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public long getMobile() {
+		return mobilenumber;
+	}
+
+	public void setMobile(long mobilenumber) {
+		this.mobilenumber = mobilenumber;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getCompanyName() {
-		return companyName;
+	public String getName() {
+		return name;
 	}
 
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getCompanyDescription() {
+	public List<String> getCompanyDescription() {
 		return companyDescription;
 	}
 
-	public void setCompanyDescription(String companyDescription) {
+	public void setCompanyDescription(List<String> companyDescription) {
 		this.companyDescription = companyDescription;
 	}
 
@@ -60,6 +85,6 @@ public class Company_Table {
 		this.workingTechnologies = workingTechnologies;
 	}
 
-	private List<String> workingTechnologies;
+	
 
 }

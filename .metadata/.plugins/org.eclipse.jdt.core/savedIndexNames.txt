@@ -143,7 +143,6 @@ INDEX VERSION 1.134+C:\Users\Admin\Documents\workspace-spring-tool-suite-4-4.22.
 2256860509.index
 4215332192.index
 85492024.index
-3941363606.index
 2985747935.index
 1775769901.index
 1176340982.index

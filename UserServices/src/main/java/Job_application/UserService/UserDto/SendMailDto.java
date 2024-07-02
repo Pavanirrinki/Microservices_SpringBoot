@@ -3,7 +3,7 @@ package Job_application.UserService.UserDto;
 public class SendMailDto {
 	  private String to;
 	  private String subject;
-	  private String body;
+	 
 	  
 	public String getTo() {
 		return to;
@@ -17,11 +17,6 @@ public class SendMailDto {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public String getBody() {
-		return body;
-	}
-	public void setBody(String body) {
-		this.body = body;
-	}
+
 
 }

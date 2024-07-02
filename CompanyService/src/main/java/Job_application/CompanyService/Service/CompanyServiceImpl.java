@@ -1,6 +1,7 @@
 package Job_application.CompanyService.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -20,14 +21,7 @@ public class CompanyServiceImpl implements CompanyService{
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@Override
-	public CompanyDto saveComapny(CompanyDto companyDto) {
 	
-		
-		Company_Table company = companyRepository.save(modelMapper.map(companyDto, Company_Table.class));
-		CompanyDto savedcompanies = modelMapper.map(company, CompanyDto.class);
-         return savedcompanies;
-		}
 
 	@Override
 	public List<Company_Table> fetchAllCompanies() {
@@ -36,14 +30,40 @@ public class CompanyServiceImpl implements CompanyService{
 	}
 
 	@Override
-	public CompanyDto updateCompanyDetails(UUID company_id,CompanyDto companyDto) {
+	public CompanyDto updateCompanyDetails(String company_id,CompanyDto companyDto) {
 		Company_Table company = companyRepository.findById(company_id).get();
 		company.setCompanyDescription(companyDto.getCompanyDescription());
-		company.setCompanyName(companyDto.getCompanyName());
+		company.setName(companyDto.getName());
 		company.setWorkingTechnologies(companyDto.getWorkingTechnologies());
 		companyRepository.save(company);
 		CompanyDto updatedCompany = modelMapper.map(company, CompanyDto.class);
 		return updatedCompany;
+	}
+
+	@Override
+	public CompanyDto saveCompanyDetails(String name, List<String> companyDescription, String email, long mobilenumber,
+			String password, List<String> workingTechnologies) {
+	    Company_Table company = new Company_Table();
+	    company.setCompanyDescription(companyDescription);
+	    company.setEmail(email);
+	    company.setName(name);
+	    company.setMobile(mobilenumber);
+	    company.setPassword(password);
+	    company.setWorkingTechnologies(workingTechnologies);
+	    return modelMapper.map(companyRepository.save(company), CompanyDto.class);
+		
+	}
+
+	@Override
+	public String loginuser(Map<String, String> loginuser) throws Exception {
+		Company_Table  companyDetails = companyRepository.findByEmail(loginuser.get("email"));
+		   if(companyDetails == null) {
+			   throw new Exception("User not found with email: " + loginuser.get("email")); 
+		   } if(!companyDetails.getPassword().equals(loginuser.get("password"))) {
+			   throw new Exception("Email and password not match:"); 
+		   }
+		return "User Successffully Login";
+
 	}
 
 	

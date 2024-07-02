@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 @Table
 public class User_data {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "Id", updatable = false, nullable = false)
 	private UUID id;
 	private String email;

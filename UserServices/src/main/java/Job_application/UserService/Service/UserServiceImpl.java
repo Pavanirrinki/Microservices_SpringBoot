@@ -1,7 +1,6 @@
 package Job_application.UserService.Service;
+
 import java.util.Arrays;
-
-
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,22 +22,20 @@ import Job_application.UserService.UserRepository.User_Graduation_repository;
 import Job_application.UserService.UserRepository.User_resumeRepository;
 
 @Service
-public class UserServiceImpl implements  UserService{
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private org.modelmapper.ModelMapper ModelMapper;
-	
+
 	@Autowired
 	private User_resumeRepository user_resumeRepository;
-	
+
 	@Autowired
 	private User_Graduation_repository user_Graduation_repository;
-	
-	
-	
+
 	@Override
 	public UserDto saveUser(UserDto userDto) {
 		User_data users = userRepository.save(ModelMapper.map(userDto, User_data.class));
@@ -47,25 +43,24 @@ public class UserServiceImpl implements  UserService{
 		return savedUser;
 	}
 
-
 	@Override
 	public User_data loginuser(String email, String password) {
-	    User_data user = userRepository.findByEmail(email);
-	    
-	    if (user == null) {
-	        throw new UserNotFoundException("User not found with email: " + email);
-	    }
-	    
-	    if (!user.getPassword().equals(password)) {
-	        throw new UserNotFoundException("Invalid email or password");
-	    }
-	    user.setPassword(null);
-	    return user;
+		User_data user = userRepository.findByEmail(email);
+
+		if (user == null) {
+			throw new UserNotFoundException("User not found with email: " + email);
+		}
+
+		if (!user.getPassword().equals(password)) {
+			throw new UserNotFoundException("Invalid email or password");
+		}
+		user.setPassword(null);
+		return user;
 	}
 
-
 	@Override
-	public User_resume UploadDocuments(UUID id,List<String> skills,MultipartFile pdf, String resumename, String uploadDate) throws IOException {
+	public User_resume UploadDocuments(UUID id, List<String> skills, MultipartFile pdf, String resumename,
+			String uploadDate) throws IOException {
 		User_data user = userRepository.findById(id).get();
 		User_resume users = new User_resume();
 		users.setUserId(user);
@@ -74,15 +69,13 @@ public class UserServiceImpl implements  UserService{
 		users.setResumename(resumename);
 		users.setUploadeddate(uploadDate);
 		user_resumeRepository.save(users);
-		
+
 		return users;
 	}
 
-	
-	
-	
 	@Override
-	public User_resume updateuserdetails(UUID id, String name, long mobilenumber, String email, List<String> skills,MultipartFile pdf) throws IOException {
+	public User_resume updateuserdetails(UUID id, String name, long mobilenumber, String email, List<String> skills,
+			MultipartFile pdf) throws IOException {
 		User_data user = userRepository.findById(id).get();
 		user.setEmail(email);
 		user.setMobilenumber(mobilenumber);
@@ -93,68 +86,63 @@ public class UserServiceImpl implements  UserService{
 		return user_resumeRepository.save(saveduser);
 	}
 
-	
-	
-	
-	
 	@Override
 	public List<UUID> ApplyForJob(List<UUID> jobIds, UUID userId) {
-	    User_resume savedUser = user_resumeRepository.findByUserId_Id(userId);
+		User_resume savedUser = user_resumeRepository.findByUserId_Id(userId);
 
-	    if (savedUser == null) {
-	        throw new RuntimeException("User resume not found for userId: " + userId);
-	    }
+		if (savedUser == null) {
+			throw new RuntimeException("User resume not found for userId: " + userId);
+		}
 
-	    List<UUID> existingAppliedJobs = savedUser.getApplied_jobs();
+		List<UUID> existingAppliedJobs = savedUser.getApplied_jobs();
 
-	    if (existingAppliedJobs == null) {
-	        existingAppliedJobs = new ArrayList<UUID>();
-	    }
+		if (existingAppliedJobs == null) {
+			existingAppliedJobs = new ArrayList<UUID>();
+		}
 
-	    existingAppliedJobs.addAll(jobIds);
-	    savedUser.setApplied_jobs(existingAppliedJobs);
-	    user_resumeRepository.save(savedUser);
+		existingAppliedJobs.addAll(jobIds);
+		savedUser.setApplied_jobs(existingAppliedJobs);
+		user_resumeRepository.save(savedUser);
 
-	    return savedUser.getApplied_jobs();
+		return savedUser.getApplied_jobs();
 	}
 
 	@Override
-	public UserGraduationDto saveEducationalDetails(UUID UserId,UserGraduationDto userGraduationDto) {
+	public UserGraduationDto saveEducationalDetails(UUID UserId, UserGraduationDto userGraduationDto) {
 		User_data user = userRepository.findById(UserId).get();
-		
-        User_graduation updateuser =  new User_graduation();
-        updateuser.setCourse(userGraduationDto.getCourse());
-        updateuser.setEndDate(userGraduationDto.getEndDate());
-        updateuser.setGradeSystem(userGraduationDto.getGradeSystem());
-        updateuser.setGraduation_type(userGraduationDto.getGraduation_type());
-        updateuser.setInstitute(userGraduationDto.getInstitute());
-        updateuser.setMarks_Grade(userGraduationDto.getMarks_Grade());
-        updateuser.setSpecilization(userGraduationDto.getSpecilization());
-        updateuser.setStartDate(userGraduationDto.getStartDate());
-        updateuser.setUniversity(userGraduationDto.getUniversity());
-        updateuser.setUserId(user);
-        UserGraduationDto updatedUser = ModelMapper.map(user_Graduation_repository.save(updateuser), UserGraduationDto.class);
-		return  updatedUser;
-		
+
+		User_graduation updateuser = new User_graduation();
+		updateuser.setCourse(userGraduationDto.getCourse());
+		updateuser.setEndDate(userGraduationDto.getEndDate());
+		updateuser.setGradeSystem(userGraduationDto.getGradeSystem());
+		updateuser.setGraduation_type(userGraduationDto.getGraduation_type());
+		updateuser.setInstitute(userGraduationDto.getInstitute());
+		updateuser.setMarks_Grade(userGraduationDto.getMarks_Grade());
+		updateuser.setSpecilization(userGraduationDto.getSpecilization());
+		updateuser.setStartDate(userGraduationDto.getStartDate());
+		updateuser.setUniversity(userGraduationDto.getUniversity());
+		updateuser.setUserId(user);
+		UserGraduationDto updatedUser = ModelMapper.map(user_Graduation_repository.save(updateuser),
+				UserGraduationDto.class);
+		return updatedUser;
+
 	}
 
-
-	 @Override
-	    public List<User_data> fetchallusers() {
-	        return userRepository.findAll();
-	    }
-
+	@Override
+	public List<User_data> fetchallusers() {
+		return userRepository.findAll();
+	}
 
 	@Override
-	public UserDto updateUserPersonalDetails(UserDto userDto,UUID UserId) {
+	public UserDto updateUserPersonalDetails(UserDto userDto, UUID UserId) {
 		User_data user = userRepository.findById(UserId).get();
-		if(user.getProfile_pic() == null) {
+		if (user.getProfile_pic() == null) {
 			user.setProfile_pic(null);
-		}else {
+		} else {
 			user.setProfile_pic(user.getProfile_pic());
 		}
-	     String languages = userDto.getLanguageKnown();
-	        List<String> languageList = Arrays.asList(languages.split(","));
+		String languages = userDto.getLanguageKnown();
+		List<String> languageList = Arrays.asList(languages.split(","));
 		user.setName(userDto.getName());
 		user.setCountry(userDto.getCountry());
 		user.setDateOfBirth(userDto.getDateOfBirth());
@@ -176,11 +164,16 @@ public class UserServiceImpl implements  UserService{
 		UserDto updatedUser = ModelMapper.map(user, UserDto.class);
 		return updatedUser;
 	}
+
+	@Override
+	public User_data ChangePassword(String email, String password) {
+		User_data userData = userRepository.findByEmail(email);
+		if (userData == null) {
+			throw new UserNotFoundException("User not found with email: " + email);
+		} else {
+			userData.setPassword(password);
+			userRepository.save(userData);
+			return userData;
+		}
+	}
 }
-
-
-
-
-
-
-

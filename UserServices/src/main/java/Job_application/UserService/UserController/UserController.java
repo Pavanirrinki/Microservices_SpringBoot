@@ -3,17 +3,14 @@ package Job_application.UserService.UserController;
 import java.util.Map;
 import java.util.UUID;
 import java.io.IOException;
-
 import java.util.Base64;
 import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import Job_application.UserService.UserController.OTP;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -39,6 +36,8 @@ import Job_application.UserService.UserEntity.User_resume;
 import Job_application.UserService.UserRepository.UserRepository;
 import Job_application.UserService.UserRepository.User_Graduation_repository;
 import Job_application.UserService.UserRepository.User_resumeRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 @RestController
 @RequestMapping("/users")
@@ -68,14 +67,10 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<UserDto> Register(@RequestBody UserDto userDto) {
-		try {
-			UserDto data = userService.saveUser(userDto);
-			return new ResponseEntity<>(data, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<UserDto> Register(@RequestBody UserDto userDto) throws UserNotFoundException {
+
+		UserDto data = userService.saveUser(userDto);
+		return ResponseEntity.ok(data);
 
 	}
 
@@ -175,21 +170,37 @@ public class UserController {
 	private OTP[] items = new OTP[0];
 
 	@PostMapping("/otp-send")
-	public OTP[] triggerMail(@RequestBody SendMailDto mailDto) {
-		System.out.println("Mail sent");
+	public ResponseEntity<?> triggerMail(@RequestBody Map<String, String> loginData) {
+		String email = loginData.get("email");
 
-		// Send email
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(mailDto.getTo());
-		message.setSubject(mailDto.getSubject());
-		message.setText(mailDto.getBody());
-		mailSender.send(message);
+		if (email == null || email.isEmpty()) {
+			return new ResponseEntity<>("Email is required", HttpStatus.BAD_REQUEST);
+		}
 
-		OTP otpEmail = new OTP(mailDto.getTo(), generateOtp());
+		User_data userdata = userRepository.findByEmail(email);
+		if (userdata == null) {
+			return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+		}
 
-		items = addToArray(items, otpEmail);
+		try {
+			OTP otpEmail = new OTP(email, generateOtp());
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+			String htmlMsg = String.format("<h3>Hello,</h3><h1>Your OTP code is: %s</h1>", otpEmail.getOtp());
 
-		return items;
+			helper.setText(htmlMsg, true);
+			helper.setTo(email);
+			helper.setSubject("Regarding Job Portal Application");
+			helper.setFrom("pd.pavanirrinki@gmail.com");
+			mailSender.send(mimeMessage);
+
+			items = addToArray(items, otpEmail);
+
+			return new ResponseEntity<>(items, HttpStatus.OK);
+		} catch (MessagingException e) {
+			// Handle email sending errors
+			return new ResponseEntity<>("Error sending OTP email", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	private OTP[] addToArray(OTP[] array, OTP element) {
@@ -206,14 +217,21 @@ public class UserController {
 	}
 
 	@PostMapping("/verify_otp")
-    public String verifyOTP(@RequestParam String email, @RequestParam String otp) {
-        for (int i = 0; i < items.length; i++) {
-            OTP storedOtp = items[i];
-            if (storedOtp != null && storedOtp.getEmail().equals(email) && storedOtp.getOtp().equals(otp)) {
-                return "OTP verified successfully!";
-            }
-        }
-        return "OTP verification failed.";
-    }
+	public String verifyOTP(@RequestBody Map<String, String> OTPDTO) {
+		for (int i = 0; i < items.length; i++) {
+			OTP storedOtp = items[i];
+			if (storedOtp != null && storedOtp.getEmail().equals(OTPDTO.get("email"))
+					&& storedOtp.getOtp().equals(OTPDTO.get("otp"))) {
+				items[i] = null;
+				return "OTP verified successfully!";
+			}
+		}
+		return "OTP verification failed.";
+	}
 
+	@PatchMapping("/Change_password")
+	public ResponseEntity<User_data> ChangePassword(@RequestBody Map<String, String> NewPasswordData) throws UserNotFoundException {
+        User_data userdata = userService.ChangePassword(NewPasswordData.get("email"), NewPasswordData.get("password"));
+		return ResponseEntity.ok(userdata);
+}
 }
