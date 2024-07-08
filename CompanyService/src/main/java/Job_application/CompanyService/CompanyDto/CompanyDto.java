@@ -3,6 +3,9 @@ package Job_application.CompanyService.CompanyDto;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
+
 
 
 public class CompanyDto {
@@ -13,8 +16,15 @@ public class CompanyDto {
     private List<String> workingTechnologies;
     private String email;
     private long mobilenumber;
-    
-    public String getName() {
+	private String profile_pic;
+	
+    public String getProfile_pic() {
+		return profile_pic;
+	}
+	public void setProfile_pic(String profile_pic) {
+		this.profile_pic = profile_pic;
+	}
+	public String getName() {
 		return name;
 	}
 	public void setName(String name) {

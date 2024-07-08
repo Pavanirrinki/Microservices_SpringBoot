@@ -27,7 +27,26 @@ public class Company_Table {
     private String email;
 	private long mobilenumber;
 	private String password;
+	@Lob
+	@Column(columnDefinition = "MEDIUMBLOB")
+	private String Comapany_profile_pic;
 	
+	public long getMobilenumber() {
+		return mobilenumber;
+	}
+
+	public void setMobilenumber(long mobilenumber) {
+		this.mobilenumber = mobilenumber;
+	}
+
+	public String getComapany_profile_pic() {
+		return Comapany_profile_pic;
+	}
+
+	public void setComapany_profile_pic(String comapany_profile_pic) {
+		Comapany_profile_pic = comapany_profile_pic;
+	}
+
 	private List<String> workingTechnologies;
 	public String getEmail() {
 		return email;

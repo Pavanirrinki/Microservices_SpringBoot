@@ -124,9 +124,9 @@ public class UserController {
 	}
 
 	@PostMapping("/apply_for_job")
-	public List<UUID> ApplyForJob(@RequestParam(name = "JobId") List<UUID> JobId,
-			@RequestParam(name = "userId") UUID userId) {
-		List<UUID> SAVED = userService.ApplyForJob(JobId, userId);
+	public User_resume ApplyForJob(@RequestParam(name = "JobId") String JobId,
+			@RequestParam(name = "userId") String userId) {
+		User_resume SAVED = userService.ApplyForJob(JobId, userId);
 		return SAVED;
 
 	}

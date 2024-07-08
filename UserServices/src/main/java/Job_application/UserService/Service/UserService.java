@@ -20,7 +20,7 @@ public interface UserService {
 	User_data loginuser(String email,String password);
 	User_resume UploadDocuments(UUID id, List<String> skills, MultipartFile pdf, String resumename, String uploadDate) throws IOException;
 	User_resume updateuserdetails(UUID id, String name, long mobilenumber, String email, List<String> skills,MultipartFile pdf) throws IOException;
-	List<UUID> ApplyForJob(List<UUID> JobId, UUID userId);
+	User_resume ApplyForJob(String jobId, String userId);
 	List<User_data> fetchallusers();
 	UserGraduationDto saveEducationalDetails(UUID UserId, UserGraduationDto userGraduationDto);
 	UserDto updateUserPersonalDetails(UserDto userDto, UUID userId);

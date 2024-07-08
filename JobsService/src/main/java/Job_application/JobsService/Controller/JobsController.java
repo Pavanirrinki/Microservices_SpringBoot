@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import Job_application.JobsService.FeignClient.UserClient;
 import Job_application.JobsService.JobsDto.JobsDto;
 import Job_application.JobsService.JobsRepository.JobsRepository;
 import Job_application.JobsService.Service.JobsService;
+import Job_application.JobsService.external.JobsAndCompanyDto;
 import Job_application.JobsService.external.UserDto;
 
 @RestController
@@ -43,8 +45,20 @@ public class JobsController {
 	private ModelMapper modelMapper;
 
 	@PostMapping("/save")
-	public JobsDto saveJob(@RequestBody JobsDto jobsDto) {
-		JobsDto savedjobs = jobsService.SaveJob(jobsDto);
+	public JobsDto saveJob(@RequestParam("jobDescription") List<String> jobDescription,
+            @RequestParam("minExp") String minExp,
+            @RequestParam("maxExp") String maxExp,
+            @RequestParam("minSal") String minSal,
+            @RequestParam("maxSal") String maxSal,
+            @RequestParam("companyId") String companyId,
+            @RequestParam("location") String location,
+            @RequestParam("workmode") String workmode,
+            @RequestParam("jobTitle") String jobTitle,
+            @RequestParam("industryType") String industryType,
+            @RequestParam("openings") String openings,
+            @RequestParam("skills") List<String> skills,
+            @RequestParam("qualifications") List<String> qualifications) {
+		JobsDto savedjobs = jobsService.SaveJob(jobDescription,minExp,maxExp,minSal,maxSal,companyId,location,workmode,jobTitle,industryType,openings,skills,qualifications);
 		return savedjobs;
 
 	}
@@ -52,21 +66,21 @@ public class JobsController {
 
 	
 	@PutMapping("/update_job_details")
-	public JobsDto updateJobDetails(@RequestParam(name = "id") UUID id,@RequestBody JobsDto jobsDto) {
+	public JobsDto updateJobDetails(@RequestParam(name = "id") String id,@RequestBody JobsDto jobsDto) {
 		JobsDto updatedJob = jobsService.updateJobDetails(id,jobsDto);
 		return updatedJob;
 		
 	}
 	
 	@GetMapping("/fetch_all_jobs")
-	public List<Jobs_Table> FetchAllJobs(){
-		List<Jobs_Table> alljobs = jobsService.FetchAllJobs();
+	public List<JobsAndCompanyDto> FetchAllJobs(){
+		List<JobsAndCompanyDto> alljobs = jobsService.FetchAllJobs();
 		return alljobs;
 		
 	}
 
     @GetMapping("/fetch_jobs_by_companyId/{CompanyId}")
-    public List<Jobs_Table> getJobsByCompanyId(@PathVariable UUID CompanyId) {
+    public List<Jobs_Table> getJobsByCompanyId(@PathVariable String CompanyId) {
     	List<Jobs_Table> AllJobsbyCompany = jobsService.findAllJobsByCompanyId(CompanyId);
 
     	return AllJobsbyCompany;
@@ -81,26 +95,35 @@ public class JobsController {
 
 	
 	@DeleteMapping("/delete_job/{Job_Id}")
-	public String DeleteJobByCompany(@PathVariable UUID Job_Id ) {
+	public String DeleteJobByCompany(@PathVariable String Job_Id ) {
 		String DeleteJob = jobsService.DeleteJob(Job_Id);
 		return DeleteJob;
 		
 	}
 	
 	@GetMapping("/Job_details/{id}")
-	public JobsDto GetParticularJob(@PathVariable(name ="id") UUID user_id) {
-		Jobs_Table particularJob = jobsRepository.findById(user_id).get();
-		JobsDto particularJobDetails = modelMapper.map(particularJob,JobsDto.class);
+	public JobsAndCompanyDto GetParticularJob(@PathVariable(name ="id") String user_id) {
+
+		JobsAndCompanyDto particularJobDetails = jobsService.particularJobDetails(user_id);
 		return particularJobDetails;
 		
 	}
 	
+	@PostMapping("/update_applied_Job")
+	public String UpdateAppliedJob(@RequestParam(name = "jobIds") String jobIds,
+            @RequestParam(name = "userId") String userId) {
+	    String saveUser = jobsService.UpdateAppliedJob(jobIds,userId);
+	    return saveUser;
+	}
+
+
 	
-	
-	
-	
-	
-	
+    @GetMapping("/fetch_jobs_by_companyId")
+    public List<Jobs_Table> getJobsByCompanyId() {
+    	
+
+    	return jobsRepository.findAll();
+    }
 	
 	
 	
@@ -112,3 +135,4 @@ public class JobsController {
 	  return companyClient.CompanyDetails();
   }
 }
+;

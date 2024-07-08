@@ -41,7 +41,7 @@ public class User_resume {
 	@Lob
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private String pdf;
-    private List<UUID> Applied_jobs;
+    private List<String> Applied_jobs;
     
     public String getResumename() {
 		return resumename;
@@ -60,12 +60,13 @@ public class User_resume {
 		this.uploadeddate = uploadeddate;
 	}
 
-	public List<UUID> getApplied_jobs() {
+
+	public List<String> getApplied_jobs() {
 		return Applied_jobs;
 	}
 
-	public void setApplied_jobs(List<UUID> jobId) {
-		this.Applied_jobs = jobId;
+	public void setApplied_jobs(List<String> applied_jobs) {
+		Applied_jobs = applied_jobs;
 	}
 
 	public List<String> getSkills() {

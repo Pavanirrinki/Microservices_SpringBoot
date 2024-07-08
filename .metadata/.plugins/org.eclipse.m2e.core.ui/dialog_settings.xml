@@ -29,6 +29,7 @@
 	</section>
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="C:\Users\Admin\Documents\workspace-spring-tool-suite-4-4.22.1.RELEASE\UserServices\src\main\java\Job_application\UserService\UserEntity\User_data.java"/>
 			<item value="C:\Users\Admin\Downloads\demo"/>
 		</list>
 		<list key="projectNameTemplate">

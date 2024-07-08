@@ -13,7 +13,7 @@ import Job_application.UserService.UserEntity.User_data;
 public class UserResumeDto {
 	private UUID id;
 	private User_data userId;
-	 private UUID[] Applied_jobs;
+	 private List<String> Applied_jobs;
 	  private String resumename;
 	  private String uploadeddate;
 	 private String pdf;
@@ -38,10 +38,11 @@ public class UserResumeDto {
 	public void setUploadeddate(String uploadeddate) {
 		this.uploadeddate = uploadeddate;
 	}
-	public UUID[] getApplied_jobs() {
+
+	public List<String> getApplied_jobs() {
 		return Applied_jobs;
 	}
-	public void setApplied_jobs(UUID[] applied_jobs) {
+	public void setApplied_jobs(List<String> applied_jobs) {
 		Applied_jobs = applied_jobs;
 	}
 	public UUID getId() {

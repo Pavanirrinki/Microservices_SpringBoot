@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -49,14 +50,14 @@ public class CompanyController {
 	        @RequestParam(name = "email") String email,
 	        @RequestParam(name = "mobilenumber") long mobilenumber,
 	        @RequestParam(name = "password") String password,
-	        @RequestParam(name = "workingTechnologies") List<String> workingTechnologies) {
-		CompanyDto company = companyServicve.saveCompanyDetails(name,companyDescription,email,mobilenumber,password,workingTechnologies);
+	        @RequestParam(name = "workingTechnologies") List<String> workingTechnologies,@RequestParam(name="profile_pic") String profile_pic) {
+		CompanyDto company = companyServicve.saveCompanyDetails(name,companyDescription,email,mobilenumber,password,workingTechnologies,profile_pic);
          return company;
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> CompanyLogin(@RequestBody Map<String,String> loginuser) throws Exception {
-		String loginSucess = companyServicve.loginuser(loginuser);
+	public ResponseEntity<?> CompanyLogin(@RequestBody Map<String,String> loginuser) throws Exception {
+		CompanyDto loginSucess = companyServicve.loginuser(loginuser);
 		return ResponseEntity.ok(loginSucess);
 		 		
 	}
@@ -78,28 +79,30 @@ public List<Company_Table> FetchAllCompanies(){
 	
 }
 
-@PutMapping("/update_company_details/{company_id}")
-public CompanyDto UpdateCompanyDetails(@PathVariable String company_id,@RequestBody CompanyDto companyDto) {
+@PatchMapping("/update_company_details")
+public CompanyDto UpdateCompanyDetails(@RequestParam(name="company_id") String company_id,@RequestParam(name="email") String email,
+		@RequestParam(name="name") String name,
+		@RequestParam(name="mobilenumber") String mobilenumber,
+		@RequestParam(name="companyDescription") List<String> companyDescription,
+		@RequestParam(name="workingTechnologies") List<String> workingTechnologies) {
 
-	CompanyDto updatecompany = companyServicve.updateCompanyDetails(company_id,companyDto);
+	CompanyDto updatecompany = companyServicve.updateCompanyDetails(company_id,name,email,mobilenumber,companyDescription,workingTechnologies);
 	return updatecompany;
 	
 }
-
-
-
-
-
-
-
-
-
 @PostMapping("/Reference")
 public String Reference(@RequestBody  List<String> technologies) {
 	Reference_Table ref = new Reference_Table();
 	ref.setTechnologies(technologies);
 	referenceRepository.save(ref);
 	return null;
+	
+}
+
+@GetMapping("/get_particular_company_details/{company_id}")
+public Company_Table GetParticularCompanyDetails(@PathVariable String company_id) {
+	return companyRepository.findById(company_id).get();
+	
 	
 }
 }

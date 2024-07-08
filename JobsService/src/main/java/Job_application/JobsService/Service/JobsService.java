@@ -5,20 +5,20 @@ import java.util.UUID;
 
 import Job_application.JobsService.Entity.Jobs_Table;
 import Job_application.JobsService.JobsDto.JobsDto;
+import Job_application.JobsService.external.JobsAndCompanyDto;
 
 public interface JobsService {
-   
-	JobsDto SaveJob(JobsDto jobsDto);
+	JobsDto updateJobDetails(String id, JobsDto jobsDto);
+	List<JobsAndCompanyDto> FetchAllJobs();
+    List<Jobs_Table> findAllJobsByCompanyId(String companyId);
+    List<Jobs_Table> findByJobDescription(String jobDescription);
+    String DeleteJob(String job_Id);
+    JobsDto SaveJob(List<String> jobDescription, String minExp, String maxExp, String minSal, String maxSal, String companyId,
+			String location, String workmode, String jobTitle, String industryType, String openings,
+			List<String> skills,List<String> qualifications);
+    JobsAndCompanyDto particularJobDetails(String user_id);
+	String UpdateAppliedJob(String jobsIds, String userId);
+  
 
-	JobsDto updateJobDetails(UUID id, JobsDto jobsDto);
 
-	List<Jobs_Table> FetchAllJobs();
-
-	List<Jobs_Table> findAllJobsByCompanyId(UUID companyId);
-
-	List<Jobs_Table> findByJobDescription(String jobDescription);
-
-	String DeleteJob(UUID job_Id);
-
-	
 }

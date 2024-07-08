@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import Job_application.UserService.FeignClient.JobsClient;
 import Job_application.UserService.UserDto.UserDto;
 import Job_application.UserService.UserDto.UserGraduationDto;
 import Job_application.UserService.UserEntity.User_data;
@@ -35,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private User_Graduation_repository user_Graduation_repository;
+	
+	@Autowired
+	private JobsClient jobsClient;
 
 	@Override
 	public UserDto saveUser(UserDto userDto) {
@@ -87,24 +91,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UUID> ApplyForJob(List<UUID> jobIds, UUID userId) {
-		User_resume savedUser = user_resumeRepository.findByUserId_Id(userId);
+	public User_resume ApplyForJob(String jobIds, String userId) {
+		UUID uuid = UUID.fromString(userId);
+		User_resume savedUser = user_resumeRepository.findByUserId_Id(uuid);
 
 		if (savedUser == null) {
 			throw new RuntimeException("User resume not found for userId: " + userId);
 		}
 
-		List<UUID> existingAppliedJobs = savedUser.getApplied_jobs();
+		List<String> existingAppliedJobs = savedUser.getApplied_jobs();
 
 		if (existingAppliedJobs == null) {
-			existingAppliedJobs = new ArrayList<UUID>();
+			existingAppliedJobs = new ArrayList<String>();
 		}
 
-		existingAppliedJobs.addAll(jobIds);
+		existingAppliedJobs.add(jobIds);
 		savedUser.setApplied_jobs(existingAppliedJobs);
+		jobsClient.UpdateAppliedJobs(jobIds, userId);
+		
 		user_resumeRepository.save(savedUser);
 
-		return savedUser.getApplied_jobs();
+		return savedUser;
 	}
 
 	@Override
