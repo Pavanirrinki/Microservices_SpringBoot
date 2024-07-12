@@ -20,8 +20,15 @@ public class JobsAndCompanyDto {
     private String IndustryType;
     private int openings;
     private Date posted;
+    private UserDto userId;
     
-    public List<String> getQualifications() {
+    public UserDto getUserId() {
+		return userId;
+	}
+	public void setUserId(UserDto userId) {
+		this.userId = userId;
+	}
+	public List<String> getQualifications() {
 		return qualifications;
 	}
 	public void setQualifications(List<String> qualifications) {

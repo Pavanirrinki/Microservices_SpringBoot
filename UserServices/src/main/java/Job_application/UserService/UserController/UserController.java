@@ -5,6 +5,8 @@ import java.util.UUID;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+
+import org.apache.tika.exception.TikaException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,12 +26,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import Job_application.UserService.Service.FileExtractionService;
 import Job_application.UserService.Service.UserNotFoundException;
 import Job_application.UserService.Service.UserService;
+
 import Job_application.UserService.UserDto.SendMailDto;
+import Job_application.UserService.UserDto.UserDetailsDTO;
 import Job_application.UserService.UserDto.UserDto;
 import Job_application.UserService.UserDto.UserGraduationDto;
-
+import Job_application.UserService.UserDto.UserResumeDto;
 import Job_application.UserService.UserEntity.User_data;
 import Job_application.UserService.UserEntity.User_graduation;
 import Job_application.UserService.UserEntity.User_resume;
@@ -60,11 +65,31 @@ public class UserController {
 	@Autowired
 	private ModelMapper modelmapper;
 
+	
+	private FileExtractionService fileExtractionService = new FileExtractionService();
+
+ 
+    public UserController(FileExtractionService fileExtractionService) {
+        this.fileExtractionService = fileExtractionService;
+    }
+
+    @PostMapping("/extract")
+    public ResponseEntity<String> extractFileContent(@RequestParam("file") MultipartFile file) {
+        try {
+            String content = fileExtractionService.extractContent(file);
+            return new ResponseEntity<>(content, HttpStatus.OK);
+        } catch (IOException | TikaException e) {
+            return new ResponseEntity<>("Failed to extract content: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 	@GetMapping("/test")
 	public String testEndpoint() {
 		System.out.println("ppppppppppppppppp");
 		return "Test endpoint reached!";
 	}
+	
+	
+	
 
 	@PostMapping("/register")
 	public ResponseEntity<UserDto> Register(@RequestBody UserDto userDto) throws UserNotFoundException {
@@ -149,6 +174,7 @@ public class UserController {
 
 	}
 
+	
 	@PutMapping("/Update_profile/{userId}")
 	public String UpdateProfile(@PathVariable String userId, @RequestParam(name = "profile") MultipartFile profile)
 			throws IOException {
@@ -160,6 +186,7 @@ public class UserController {
 
 	}
 
+	
 	@PatchMapping("/update_user_personal_details/{userId}")
 	public UserDto UpdateUserPersonalDetails(@PathVariable String userId, @RequestBody UserDto userDto) {
 		UUID UserId = UUID.fromString(userId);
@@ -167,6 +194,8 @@ public class UserController {
 		return updateduser;
 	}
 
+	
+	
 	private OTP[] items = new OTP[0];
 
 	@PostMapping("/otp-send")
@@ -211,11 +240,13 @@ public class UserController {
 	}
 
 	private String generateOtp() {
-
 		int otp = (int) (Math.random() * 900000) + 100000;
 		return String.valueOf(otp);
 	}
 
+	
+	
+	
 	@PostMapping("/verify_otp")
 	public String verifyOTP(@RequestBody Map<String, String> OTPDTO) {
 		for (int i = 0; i < items.length; i++) {
@@ -229,9 +260,32 @@ public class UserController {
 		return "OTP verification failed.";
 	}
 
+	
+	
 	@PatchMapping("/Change_password")
 	public ResponseEntity<User_data> ChangePassword(@RequestBody Map<String, String> NewPasswordData) throws UserNotFoundException {
-        User_data userdata = userService.ChangePassword(NewPasswordData.get("email"), NewPasswordData.get("password"));
+		User_data userdata = userService.ChangePassword(NewPasswordData.get("email"), NewPasswordData.get("password"));
 		return ResponseEntity.ok(userdata);
-}
+	}
+	
+	
+	
+	
+	@GetMapping("/user_details/{userId}")
+	public ResponseEntity<?> UserDetails(@PathVariable String userId) {
+		UUID uuid = UUID.fromString(userId);
+		User_data userdata = userRepository.findById(uuid).orElse(null);
+		User_resume userResume = userResumeRepository.findByUserId_Id(uuid);
+		User_graduation userGraduation = userGraduationRepository.findByUserId_Id(uuid);
+
+		if (userdata == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+		}
+
+		UserDetailsDTO userDetailsDTO = new UserDetailsDTO(userdata, userResume, userGraduation);
+		return ResponseEntity.ok(userDetailsDTO);
+	}
+
+
+
 }

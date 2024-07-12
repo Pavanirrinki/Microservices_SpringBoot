@@ -1,10 +1,14 @@
 package Job_application.JobsService.Controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,11 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import Job_application.JobsService.Entity.Jobs_Table;
 import Job_application.JobsService.FeignClient.CompanyClient;
 import Job_application.JobsService.FeignClient.UserClient;
+import Job_application.JobsService.JobsDto.JobWithUserDetailsResponse;
 import Job_application.JobsService.JobsDto.JobsDto;
 import Job_application.JobsService.JobsRepository.JobsRepository;
 import Job_application.JobsService.Service.JobsService;
 import Job_application.JobsService.external.JobsAndCompanyDto;
-import Job_application.JobsService.external.UserDto;
+
 
 @RestController
 @RequestMapping("/Jobs")
@@ -120,14 +125,36 @@ public class JobsController {
 	
     @GetMapping("/fetch_jobs_by_companyId")
     public List<Jobs_Table> getJobsByCompanyId() {
-    	
-
-    	return jobsRepository.findAll();
+       return jobsRepository.findAll();
     }
 	
-	
-	
-	
+
+    @GetMapping("/jobs_posted_by_company/{companyId}")
+    public ResponseEntity<?> JobsPostedByCompany(@PathVariable(name ="companyId") String companyId){
+        List<Jobs_Table> allJobsByCompany = jobsRepository.findAllByCompanyId(companyId);
+        List<JobWithUserDetailsResponse> result = new ArrayList<>();
+
+        for (Jobs_Table job : allJobsByCompany) {
+            List<Object> userDetailsList = new ArrayList<>();
+            if (job.getApplied() != null) {
+                for (String applied : job.getApplied()) {
+                    ResponseEntity<?> response = userClient.UserDetails(applied);
+                    if (response.getBody() != null) {
+                        userDetailsList.add(response.getBody());
+                    }
+                }
+            }
+            result.add(new JobWithUserDetailsResponse(job, userDetailsList));
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
+   
+    
+    
+
+
 	
 	
   @GetMapping("/company_details")

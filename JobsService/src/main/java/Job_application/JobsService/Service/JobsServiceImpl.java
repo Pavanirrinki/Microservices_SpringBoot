@@ -142,6 +142,7 @@ public class JobsServiceImpl implements JobsService{
 		particularjobandcompany.setTechnologiesKnown(particularJob.getTechnologiesKnown());
 		particularjobandcompany.setWorkmode(particularJob.getWorkmode());
 		particularjobandcompany.setQualifications(particularJob.getQualifications());
+		particularjobandcompany.setApplied(particularJob.getApplied());
 		return particularjobandcompany;
 	}
 

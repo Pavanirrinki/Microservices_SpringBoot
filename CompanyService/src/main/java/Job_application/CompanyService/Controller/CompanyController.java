@@ -102,7 +102,6 @@ public String Reference(@RequestBody  List<String> technologies) {
 @GetMapping("/get_particular_company_details/{company_id}")
 public Company_Table GetParticularCompanyDetails(@PathVariable String company_id) {
 	return companyRepository.findById(company_id).get();
-	
-	
 }
+
 }
