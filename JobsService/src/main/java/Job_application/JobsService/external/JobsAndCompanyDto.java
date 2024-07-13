@@ -3,6 +3,8 @@ package Job_application.JobsService.external;
 import java.util.Date;
 import java.util.List;
 
+import Job_application.JobsService.Entity.Jobs_Table;
+
 public class JobsAndCompanyDto {
 	private String id;
 	private List<String> jobDescription;
@@ -22,7 +24,8 @@ public class JobsAndCompanyDto {
     private Date posted;
     private UserDto userId;
     
-    public UserDto getUserId() {
+   
+	public UserDto getUserId() {
 		return userId;
 	}
 	public void setUserId(UserDto userId) {

@@ -167,7 +167,7 @@ public class UserController {
 	}
 
 	@GetMapping("/fetch_all_users")
-	public List<User_data> FetchAllJobs() {
+	public List<User_data> FetchAllJobs(@PathVariable("page") int page) {
 
 		List<User_data> fetchedusers = userService.fetchallusers();
 		return fetchedusers;

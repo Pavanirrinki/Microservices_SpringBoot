@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="jakarta.persistence.OneToOne"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.Entity"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.Table"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.Id"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.GeneratedValue"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.GenerationType"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.OneToMany"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.ManyToOne"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.JoinColumn"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.CascadeType"/>
-    <fullyQualifiedTypeName name="org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.EnableWebMvcConfiguration"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMethod"/>
-    <fullyQualifiedTypeName name="com.example.demo.WebConfig"/>
-    <fullyQualifiedTypeName name="org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource"/>
-    <fullyQualifiedTypeName name="java.util.Collection"/>
     <fullyQualifiedTypeName name="org.springframework.context.annotation.Configuration"/>
     <fullyQualifiedTypeName name="org.springframework.web.filter.CorsFilter"/>
     <fullyQualifiedTypeName name="org.springframework.web.cors.CorsConfiguration"/>
@@ -34,7 +19,6 @@
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
     <fullyQualifiedTypeName name="Job_application.UserService.UserRepository.User_resumeRepository"/>
     <fullyQualifiedTypeName name="org.modelmapper.ModelMapper"/>
-    <fullyQualifiedTypeName name="Job_application.UserService.UserDto.UserResumeDto"/>
     <fullyQualifiedTypeName name="org.hibernate.Hibernate"/>
     <fullyQualifiedTypeName name="org.springframework.boot.context.config.ConfigDataResourceNotFoundException"/>
     <fullyQualifiedTypeName name="Job_application.UserService.UserRepository.User_Graduation_repository"/>
@@ -49,8 +33,6 @@
     <fullyQualifiedTypeName name="org.springframework.cloud.client.discovery.EnableDiscoveryClient"/>
     <fullyQualifiedTypeName name="org.springframework.cloud.config.server.EnableConfigServer"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Value"/>
-    <fullyQualifiedTypeName name="Job_application.UserService.UserEntity.User_graduation"/>
-    <fullyQualifiedTypeName name="Job_application.UserService.UserDto.UserGraduationDto"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Lob"/>
     <fullyQualifiedTypeName name="org.springframework.mail.javamail.JavaMailSender"/>
     <fullyQualifiedTypeName name="org.springframework.mail.SimpleMailMessage"/>
@@ -60,4 +42,22 @@
     <fullyQualifiedTypeName name="org.springframework.boot.context.event.ApplicationReadyEvent"/>
     <fullyQualifiedTypeName name="org.springframework.context.annotation.Bean"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="Job_application.JobsService.external.JobsAndCompanyDto"/>
+    <fullyQualifiedTypeName name="Job_application.JobsService.Entity.Jobs_Table"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.openfeign.EnableFeignClients"/>
+    <fullyQualifiedTypeName name="Job_application.UserService.FeignClient.JobsClient"/>
+    <fullyQualifiedTypeName name="java.util.Optional"/>
+    <fullyQualifiedTypeName name="Job_application.JobsService.JobsDto.JobsDto"/>
+    <fullyQualifiedTypeName name="Job_application.UserService.UserEntity.User_graduation"/>
+    <fullyQualifiedTypeName name="Job_application.UserService.UserDto.AllUsersDto"/>
+    <fullyQualifiedTypeName name="Job_application.UserService.UserDto.UserDto"/>
+    <fullyQualifiedTypeName name="Job_application.UserService.UserDto.UserGraduationDto"/>
+    <fullyQualifiedTypeName name="Job_application.UserService.UserDto.UserResumeDto"/>
+    <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
+    <fullyQualifiedTypeName name="org.hibernate.internal.build.AllowSysOut"/>
+    <fullyQualifiedTypeName name="org.apache.tika.exception.TikaException"/>
+    <fullyQualifiedTypeName name="Job_application.UserService.UserEntity.User_resume"/>
+    <fullyQualifiedTypeName name="org.springframework.web.multipart.MultipartFile"/>
+    <fullyQualifiedTypeName name="java.util.Collections"/>
+    <fullyQualifiedTypeName name="java.awt.print.Pageable"/>
 </qualifiedTypeNameHistroy>

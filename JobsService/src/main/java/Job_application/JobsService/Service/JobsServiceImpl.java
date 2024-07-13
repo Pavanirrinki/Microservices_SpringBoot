@@ -1,12 +1,14 @@
 package Job_application.JobsService.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -73,36 +75,42 @@ public class JobsServiceImpl implements JobsService{
 		return savedJobs;
 	}
 
-	@Override
-	public List<JobsAndCompanyDto> FetchAllJobs() {
-		PageRequest pageRequest = PageRequest.of(0, 6);
-		List<Jobs_Table> allJobs = jobsRepository.findAll(pageRequest).getContent();
-		List<JobsAndCompanyDto> jobsAndCompanyDtoList = new ArrayList<>();
-		 for (Jobs_Table job : allJobs) {
-		     String companyId = job.getCompanyId();
-		        CompanyDto companyDetails = companyClient.GetParticularCompanyDetails(companyId);
-		        JobsAndCompanyDto jobs = new JobsAndCompanyDto();
-		         jobs.setCompanyId(companyDetails);
-		         jobs.setIndustryType(job.getIndustryType());
-		         jobs.setJobDescription(job.getJobDescription());
-		         jobs.setJobTitle(job.getJobTitle());
-		         jobs.setLocation(job.getLocation());
-		         jobs.setMaxExp(job.getMaxExp());
-		         jobs.setMinExp(job.getMinExp());
-		         jobs.setMaxSal(job.getMaxSal());
-		         jobs.setMinSal(job.getMinSal());
-		         jobs.setOpenings(jobs.getOpenings());
-		         jobs.setPosted(job.getPosted());
-		         jobs.setTechnologiesKnown(job.getTechnologiesKnown());
-		         jobs.setWorkmode(job.getWorkmode());
-		         jobs.setId(job.getId());
-		         jobs.setQualifications(job.getQualifications());
-		         jobs.setApplied(job.getApplied());
-		         jobsAndCompanyDtoList.add(jobs);
-		         
-		    }
-		return jobsAndCompanyDtoList;
-	}
+	 public List<JobsAndCompanyDto> FetchAllJobs() {
+	 
+	        PageRequest pageRequest = PageRequest.of(0,6);
+	        Page<Jobs_Table> jobsPage = jobsRepository.findAll(pageRequest);
+
+	        List<Jobs_Table> allJobs = jobsPage.getContent();
+	        List<JobsAndCompanyDto> jobsAndCompanyDtoList = new ArrayList<>();
+
+	        for (Jobs_Table job : allJobs) {
+	            String companyId = job.getCompanyId();
+	            CompanyDto companyDetails = companyClient.GetParticularCompanyDetails(companyId); 
+	            JobsAndCompanyDto jobs = new JobsAndCompanyDto();
+
+	            jobs.setCompanyId(companyDetails);
+	            jobs.setIndustryType(job.getIndustryType());
+	            jobs.setJobDescription(job.getJobDescription());
+	            jobs.setJobTitle(job.getJobTitle());
+	            jobs.setLocation(job.getLocation());
+	            jobs.setMaxExp(job.getMaxExp());
+	            jobs.setMinExp(job.getMinExp());
+	            jobs.setMaxSal(job.getMaxSal());
+	            jobs.setMinSal(job.getMinSal());
+	            jobs.setOpenings(job.getOpenings()); 
+	            jobs.setPosted(job.getPosted());
+	            jobs.setTechnologiesKnown(job.getTechnologiesKnown());
+	            jobs.setWorkmode(job.getWorkmode());
+	            jobs.setId(job.getId());
+	            jobs.setQualifications(job.getQualifications());
+	            jobs.setApplied(job.getApplied());
+
+	            jobsAndCompanyDtoList.add(jobs);
+	        }
+
+	        return jobsAndCompanyDtoList;
+	    }
+	
 
 	@Override
 	public List<Jobs_Table> findAllJobsByCompanyId(String companyId) {

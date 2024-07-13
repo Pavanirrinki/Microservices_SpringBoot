@@ -77,12 +77,12 @@ public class JobsController {
 		
 	}
 	
-	@GetMapping("/fetch_all_jobs")
-	public List<JobsAndCompanyDto> FetchAllJobs(){
-		List<JobsAndCompanyDto> alljobs = jobsService.FetchAllJobs();
-		return alljobs;
-		
-	}
+
+    @GetMapping("/fetch_all_jobs")
+    public ResponseEntity<List<JobsAndCompanyDto>> fetchAllJobs() {
+        List<JobsAndCompanyDto> allJobs = jobsService.FetchAllJobs();
+        return ResponseEntity.ok(allJobs);
+    }
 
     @GetMapping("/fetch_jobs_by_companyId/{CompanyId}")
     public List<Jobs_Table> getJobsByCompanyId(@PathVariable String CompanyId) {
