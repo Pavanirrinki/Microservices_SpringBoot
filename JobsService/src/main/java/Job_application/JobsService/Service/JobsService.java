@@ -11,7 +11,7 @@ public interface JobsService {
 	JobsDto updateJobDetails(String id, JobsDto jobsDto);
 	List<JobsAndCompanyDto> FetchAllJobs();
     List<Jobs_Table> findAllJobsByCompanyId(String companyId);
-    List<Jobs_Table> findByJobDescription(String jobDescription);
+    List<Jobs_Table> findByJobDescription(String title);
     String DeleteJob(String job_Id);
     JobsDto SaveJob(List<String> jobDescription, String minExp, String maxExp, String minSal, String maxSal, String companyId,
 			String location, String workmode, String jobTitle, String industryType, String openings,
