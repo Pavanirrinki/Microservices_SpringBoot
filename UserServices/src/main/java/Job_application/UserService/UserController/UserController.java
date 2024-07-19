@@ -29,15 +29,17 @@ import org.springframework.web.multipart.MultipartFile;
 import Job_application.UserService.Service.FileExtractionService;
 import Job_application.UserService.Service.UserNotFoundException;
 import Job_application.UserService.Service.UserService;
-
+import Job_application.UserService.UserDto.ReviewAndRatingDto;
 import Job_application.UserService.UserDto.SendMailDto;
 import Job_application.UserService.UserDto.UserDetailsDTO;
 import Job_application.UserService.UserDto.UserDto;
 import Job_application.UserService.UserDto.UserGraduationDto;
 import Job_application.UserService.UserDto.UserResumeDto;
+import Job_application.UserService.UserEntity.ReviewAndRating;
 import Job_application.UserService.UserEntity.User_data;
 import Job_application.UserService.UserEntity.User_graduation;
 import Job_application.UserService.UserEntity.User_resume;
+import Job_application.UserService.UserRepository.ReviewAndRatingRepository;
 import Job_application.UserService.UserRepository.UserRepository;
 import Job_application.UserService.UserRepository.User_Graduation_repository;
 import Job_application.UserService.UserRepository.User_resumeRepository;
@@ -58,7 +60,8 @@ public class UserController {
 	private User_resumeRepository userResumeRepository;
 	@Autowired
 	private User_Graduation_repository userGraduationRepository;
-
+    @Autowired
+    private ReviewAndRatingRepository reviewAndRatingRepository;
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -284,6 +287,19 @@ public class UserController {
 
 		UserDetailsDTO userDetailsDTO = new UserDetailsDTO(userdata, userResume, userGraduation);
 		return ResponseEntity.ok(userDetailsDTO);
+	}
+
+
+	@PostMapping("/Post_Review_for_portal")
+	public String PostReviewAndRating(@RequestBody ReviewAndRatingDto reviewandratingdto) {
+	    UUID uuid = UUID.fromString(reviewandratingdto.getUserId());
+	    User_data userdata = userRepository.findById(uuid).orElseThrow(() -> new RuntimeException("User not found"));
+
+	    ReviewAndRating reviewAndRating = modelmapper.map(reviewandratingdto, ReviewAndRating.class);
+	    reviewAndRating.setUserId(userdata); 
+
+	    reviewAndRatingRepository.save(reviewAndRating);
+	    return "Successfully Posted Review";
 	}
 
 
