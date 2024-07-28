@@ -42,10 +42,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto saveUser(UserDto userDto) {
-		User_data users = userRepository.save(ModelMapper.map(userDto, User_data.class));
-		UserDto savedUser = ModelMapper.map(users, UserDto.class);
-		return savedUser;
+	    User_data existingUser = userRepository.findByEmail(userDto.getEmail());
+	    if (existingUser != null) {
+	        throw new UserNotFoundException("User with this email already exists");
+	    }
+	    User_data user = userRepository.save(ModelMapper.map(userDto, User_data.class));
+	    return ModelMapper.map(user, UserDto.class);
 	}
+
 
 	@Override
 	public User_data loginuser(String email, String password) {
@@ -63,12 +67,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User_resume UploadDocuments(UUID id, List<String> skills, MultipartFile pdf, String resumename,
+	public User_resume UploadDocuments(UUID id, List<String> skills, String pdf, String resumename,
 			String uploadDate) throws IOException {
 		User_data user = userRepository.findById(id).get();
 		User_resume users = new User_resume();
 		users.setUserId(user);
-		users.setPdf(Base64.getEncoder().encodeToString(pdf.getBytes()));
+		users.setPdf(pdf);
 		users.setSkills(skills);
 		users.setResumename(resumename);
 		users.setUploadeddate(uploadDate);

@@ -120,7 +120,7 @@ public class JobsServiceImpl implements JobsService{
 
 	@Override
 	public List<Jobs_Table> findByJobDescription(String title) {
-		List<Jobs_Table> searchedJobs = jobsRepository.findByJobTitleContainingIgnoreCase(title);
+		List<Jobs_Table> searchedJobs = jobsRepository.findByJobTitle(title);
 		return searchedJobs;
 	}
 

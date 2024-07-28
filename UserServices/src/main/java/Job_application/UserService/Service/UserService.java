@@ -18,14 +18,11 @@ public interface UserService {
 	
 	UserDto saveUser(UserDto userDto);
 	User_data loginuser(String email,String password);
-	User_resume UploadDocuments(UUID id, List<String> skills, MultipartFile pdf, String resumename, String uploadDate) throws IOException;
+	User_resume UploadDocuments(UUID id, List<String> skills,String pdf, String resumename, String uploadDate) throws IOException;
 	User_resume updateuserdetails(UUID id, String name, long mobilenumber, String email, List<String> skills,MultipartFile pdf) throws IOException;
 	User_resume ApplyForJob(String jobId, String userId);
 	List<User_data> fetchallusers();
 	UserGraduationDto saveEducationalDetails(UUID UserId, UserGraduationDto userGraduationDto);
 	UserDto updateUserPersonalDetails(UserDto userDto, UUID userId);
 	User_data ChangePassword(String email, String password);
-    
-	
-    
-}
+  }

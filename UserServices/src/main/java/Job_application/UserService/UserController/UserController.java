@@ -3,6 +3,7 @@ package Job_application.UserService.UserController;
 import java.util.Map;
 import java.util.UUID;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -95,12 +97,15 @@ public class UserController {
 	
 
 	@PostMapping("/register")
-	public ResponseEntity<UserDto> Register(@RequestBody UserDto userDto) throws UserNotFoundException {
-
-		UserDto data = userService.saveUser(userDto);
-		return ResponseEntity.ok(data);
-
+	public ResponseEntity<?> register(@RequestBody UserDto userDto) {
+	    try {
+	        UserDto data = userService.saveUser(userDto);
+	        return ResponseEntity.ok(data);
+	    } catch (UserNotFoundException e) {
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+	    }
 	}
+
 
 	@PostMapping("/login")
 	public ResponseEntity<?> Login(@RequestBody Map<String, String> loginData) {
@@ -114,7 +119,7 @@ public class UserController {
 
 	@PostMapping("/upload_user_data")
 	public User_resume uploadUserDetails(@RequestParam(name = "Id") String Id,
-			@RequestParam(name = "skills") List<String> skills, @RequestParam(name = "pdf") MultipartFile pdf,
+			@RequestParam(name = "skills") List<String> skills, @RequestParam(name = "pdf") String pdf,
 			@RequestParam("resumename") String resumename, @RequestParam("uploaddate") String uploadDate)
 			throws Exception {
 		UUID id = UUID.fromString(Id);
@@ -159,7 +164,7 @@ public class UserController {
 
 	}
 
-	@PutMapping("/Save_user_educational_details/{userId}")
+	@PostMapping("/Save_user_educational_details/{userId}")
 	public UserGraduationDto SaveEducationalDetails(@PathVariable String userId,
 			@RequestBody UserGraduationDto userGraduationDto) {
 		UUID UserId = UUID.fromString(userId);
@@ -190,7 +195,7 @@ public class UserController {
 	}
 
 	
-	@PatchMapping("/update_user_personal_details/{userId}")
+	@PostMapping("/update_user_personal_details/{userId}")
 	public UserDto UpdateUserPersonalDetails(@PathVariable String userId, @RequestBody UserDto userDto) {
 		UUID UserId = UUID.fromString(userId);
 		UserDto updateduser = userService.updateUserPersonalDetails(userDto, UserId);
@@ -302,6 +307,81 @@ public class UserController {
 	    return "Successfully Posted Review";
 	}
 
+@PutMapping("/upload_user_data")
+public  String upload_user_data(@RequestParam(name = "Id") String Id,@RequestParam(name = "skills") List<String> skills, @RequestParam(name = "pdf") String pdf,
+                                @RequestParam("resumename") String resumename, @RequestParam("uploaddate") String uploadDate) throws Exception  {
+	
+	User_resume updatedData = userResumeRepository.findByUserId_Id(UUID.fromString(Id));
+	updatedData.setPdf(pdf);
+	updatedData.setUploadeddate(uploadDate);
+	updatedData.setResumename(resumename);
+	updatedData.setSkills(skills);
+	userResumeRepository.save(updatedData);
+	return "Successfully updated Resume and skills";
+	
+}
 
 
+@PutMapping("/Save_user_educational_details/{userId}")
+public String EditGraduationDetails(@PathVariable String userId,@RequestBody UserGraduationDto userGraduationDto) {
+	User_graduation updateuser = userGraduationRepository.findByUserId_Id(UUID.fromString(userId));
+	User_data user = userRepository.findById(UUID.fromString(userId)).get();
+	userGraduationDto.setUserId(user);
+	updateuser.setCourse(userGraduationDto.getCourse());
+	updateuser.setEndDate(userGraduationDto.getEndDate());
+	updateuser.setGradeSystem(userGraduationDto.getGradeSystem());
+	updateuser.setGraduation_type(userGraduationDto.getGraduation_type());
+	updateuser.setInstitute(userGraduationDto.getInstitute());
+	updateuser.setMarks_Grade(userGraduationDto.getMarks_Grade());
+	updateuser.setSpecilization(userGraduationDto.getSpecilization());
+	updateuser.setStartDate(userGraduationDto.getStartDate());
+	updateuser.setUniversity(userGraduationDto.getUniversity());
+	updateuser.setUserId(user);
+	userGraduationRepository.save(updateuser);
+	
+	return "Successfully updated";
+	
+}
+
+@PutMapping("/update_user_personal_details/{userId}")
+public String  Updateuserpersonaldetails(@PathVariable String userId, @RequestBody UserDto userDto) {
+	User_data user = userRepository.findById(UUID.fromString(userId)).get();
+	String languages = userDto.getLanguageKnown();
+	List<String> languageList = Arrays.asList(languages.split(","));
+	user.setName(userDto.getName());
+	user.setCountry(userDto.getCountry());
+	user.setDateOfBirth(userDto.getDateOfBirth());
+	user.setDistrict(userDto.getDistrict());
+	user.setEmail(userDto.getEmail());
+	user.setExperienced(userDto.getExperienced());
+	user.setFresher_Experienced(userDto.getFresher_Experienced());
+	user.setGender(userDto.getGender());
+	user.setHometown(userDto.getHometown());
+	user.setLandmark(userDto.getLandmark());
+	user.setLanguageKnown(languageList);
+	user.setMaritualStaus(userDto.getMaritualStaus());
+	user.setMobilenumber(userDto.getMobilenumber());
+	user.setPhysicallyChallenged(userDto.getPhysicallyChallenged());
+	user.setPincode(userDto.getPincode());
+	user.setRole(userDto.getRole());
+	user.setState(userDto.getState());
+	user.setProfile_pic(userDto.getProfile_pic());
+	userRepository.save(user);
+	UserDto updatedUser = modelmapper.map(user, UserDto.class);
+	
+	return "Successfully updated profile details";
+	
+}
+
+
+@DeleteMapping("/deleteResume/{userId}")
+public String DeleteResume(@PathVariable String userId) {
+	User_resume updatedResume = userResumeRepository.findByUserId_Id(UUID.fromString(userId));
+	updatedResume.setPdf(null);
+	updatedResume.setResumename(null);
+	updatedResume.setUploadeddate(null);
+	userResumeRepository.save(updatedResume);
+	return "Deleted Resume Successfully";
+	
+}
 }

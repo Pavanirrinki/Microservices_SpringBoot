@@ -15,7 +15,7 @@ import Job_application.JobsService.Entity.Jobs_Table;
 public interface JobsRepository extends JpaRepository<Jobs_Table,String>{
 	
 	List<Jobs_Table> findAllByCompanyId(String companyId);
-List<Jobs_Table> findByJobTitleContainingIgnoreCase(String jobDescription);
+List<Jobs_Table> findByJobTitle(String jobDescription);
 
 Page<Jobs_Table> findByJobTitleContainingIgnoreCase(String jobTitle, PageRequest of);
 
